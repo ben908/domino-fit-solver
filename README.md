@@ -35,8 +35,8 @@ Next, you need to install Chrome and your WebDriver (this varies by machine and 
 
 ```
 <home>
-  ├────── /chrome-linux (direcroy)
-  ├────── /chromedriver-linux (direcroy)
+  ├────── /chrome-linux (directory)
+  ├────── /chromedriver-linux (directory)
   ├────── .gitignore (file)
   ├────── main.py (file)
   ├────── README.md (file)

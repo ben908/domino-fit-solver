@@ -41,8 +41,7 @@ def go_to_start_state(driver):
 def click_to_start(driver):
     try:
         elem = WebDriverWait(driver, 30).until(
-            #                                          /html/body/div[8]/div[3]/div[2]/div[1]/div/div[4]/div[3]/div[2]
-            EC.presence_of_element_located((By.CSS_SELECTOR, ".gameOverlayText")) #This is a dummy element
+            EC.presence_of_element_located((By.CSS_SELECTOR, ".gameOverlayText"))
         )
     finally:
         size = elem.size
@@ -51,7 +50,7 @@ def click_to_start(driver):
 def click_to_next(driver):
     driver.find_element(By.ID, "aCGNextBtn").click()
 
-#only 1 id in number cells, but at different locations depending on the number,
+# only 1 id in number cells, but at different locations depending on the number and in svgs
 def find_id(elem):
     if elem.get_attribute("id"):
         t_res = elem.get_attribute("id")
@@ -95,7 +94,7 @@ def read_board(driver, size):
     return board, board_elements, column_counts, row_counts
 
 
-# Can either do a visual solve or programtic solve
+# Can either do a visual solve or programmatic solve
 # domino1: 1        domino2: 2 0
 #          0
 
@@ -103,7 +102,7 @@ def read_board(driver, size):
 def is_valid_row(board, cur_row, row_sums):
     s = 0
     size = len(board)
-    for col in range(size): #check the row so go through each column
+    for col in range(size): # check the row so go through each column
         if board[cur_row][col] >= 1:
             s += board[cur_row][col]
     return s <= row_sums[cur_row]
@@ -111,7 +110,7 @@ def is_valid_row(board, cur_row, row_sums):
 def is_valid_col(board, cur_col, col_sums):
     s = 0
     size = len(board)
-    for row in range(size): #check the column, so go through each row
+    for row in range(size): # check the column, so go through each row
         if board[row][cur_col] >= 1:
             s += board[row][cur_col]
 
@@ -129,7 +128,7 @@ def true_solve(board, col_sums, row_sums):
     s = 0
     for cur_col in range(size):
         s = 0
-        for row in range(size): #check the column, so go through each row
+        for row in range(size): # check the column, so go through each row
             if board[row][cur_col] >= 1:
                 s += board[row][cur_col]
 
@@ -138,7 +137,7 @@ def true_solve(board, col_sums, row_sums):
 
     for cur_row in range(size):
         s = 0
-        for col in range(size): #check the row so go through each column
+        for col in range(size): # check the row so go through each column
             if board[cur_row][col] >= 1:
                 s += board[cur_row][col]
         if s != row_sums[cur_row]:
@@ -154,7 +153,7 @@ def solve(board, row_num, col_num, col_sums, row_sums):
     if col_num == size-1 and row_num == size-1:
         return true_solve(board, col_sums, row_sums)
 
-    if board[row_num][col_num] != 0: #is this space already in use
+    if board[row_num][col_num] != 0: # is this space already in use
         if solve(board, row_num, col_num + 1, col_sums, row_sums):
             return True
 
@@ -162,15 +161,15 @@ def solve(board, row_num, col_num, col_sums, row_sums):
         board[row_num][col_num] = 1
         board[row_num+1][col_num] = -1
 
-        if is_valid(board, col_num, row_num, col_sums, row_sums): #check if most recent makes valid board
-            if solve(board, row_num, col_num + 1, col_sums, row_sums): #if this "path" finds solution return
+        if is_valid(board, col_num, row_num, col_sums, row_sums): # check if most recent makes valid board
+            if solve(board, row_num, col_num + 1, col_sums, row_sums): # if this "path" finds solution return
                 return True
 
         # else backtrack
         board[row_num][col_num] = 0
         board[row_num+1][col_num] = 0
 
-    #try to place other domino
+    # try to place other domino
     if col_num < size - 1 and board[row_num][col_num] == 0 and board[row_num][col_num+1] == 0:
         board[row_num][col_num] = -2
         board[row_num][col_num+1] = 2
