@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+chrome-linux64/
+chromedriver-linux64/
+
+*.mp4
